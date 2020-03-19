@@ -54,8 +54,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		String role = authUser.getId();
 
 		String url = request.getRequestURI();
-		
-		if(url.contains(role)) {
+		String arr[] = url.split("/");
+		if(role.equals(arr[2])) {
 			return true;
 		}else {
 			response.sendRedirect(request.getContextPath() + "/user/login");
