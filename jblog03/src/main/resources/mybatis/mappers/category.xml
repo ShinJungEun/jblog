@@ -24,6 +24,14 @@
 		]]>
 	</select>	
 	
+	<select id="findCategoryCount" parameterType="String" resultType="int">
+		<![CDATA[
+		    select count(*) 
+		      from category
+		     where id=#{id}
+		]]>
+	</select>
+	
 	<insert id="insert" parameterType="categoryvo">
 		<![CDATA[
 		insert 

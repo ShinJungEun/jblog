@@ -39,4 +39,8 @@ public class CategoryService {
 		return categoryRepository.findCategoryNo(id);
 	}
 	
+	public int findCategoryCount(String id) {
+		return categoryRepository.findCategoryCount(id);
+	}
+	
 }

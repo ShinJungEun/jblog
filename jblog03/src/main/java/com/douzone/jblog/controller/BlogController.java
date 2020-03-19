@@ -42,10 +42,10 @@ public class BlogController {
 			@PathVariable Optional<Long> pathNo1,
 			@PathVariable Optional<Long> pathNo2,
 			Model model) {
-		
+
 		Long categoryNo = 0L;
 		Long postNo = 0L;
-		
+
 		if(pathNo2.isPresent() ) {
 			postNo = pathNo2.get();
 			categoryNo = pathNo1.get();
@@ -58,52 +58,49 @@ public class BlogController {
 			categoryNo = categoryService.findCategoryNo(id);
 			postNo = postService.findPostNo(categoryNo);
 		}
-		
+
 		BlogVo blogVo = blogService.find(id);
 		model.addAttribute("blogVo", blogVo);
-		
+
 		// 카테고리 리스트(우측 상단)
 		List<CategoryVo> categoryList = categoryService.list(id);
 		model.addAttribute("categoryList", categoryList);
-		
+
 		// 포스트 리스트
 		List<PostVo> postList = postService.postList(categoryNo);
 		model.addAttribute("postList", postList);
-		
+
 		// 포스트 뷰
 		PostVo postViewVo = postService.PostView(postNo);
 		model.addAttribute("postViewVo", postViewVo);
-		
+
 		return "/blog/blog-main";
 	}
-	
-	
+
+
 	// 기본설정 업데이트 페이지
 	@Auth
 	@RequestMapping(value="/admin/basic", method=RequestMethod.GET)
 	public String update(@PathVariable("id") String id, Model model,
 			@AuthUser UserVo authUser) {
-		
+
 		BlogVo blogVo = blogService.find(id);
 		model.addAttribute("blogVo", blogVo);
 		return "blog/blog-admin-basic";
 	}
-	
+
 	@Auth
 	@RequestMapping(value="/admin/basic", method=RequestMethod.POST)
 	public String update(BlogVo blogVo,
 			@PathVariable("id") String id,
 			@RequestParam(value="logo-file") MultipartFile multipartFile,
 			@AuthUser UserVo authUser) {
-		
-		System.out.println("========================================================================================"+authUser.getId());
-		
+
 		// 접근제어
 		if(!id.equals(authUser.getId())) {	
-			System.out.println("=====================================================접근제어==========================================================");
 			return "redirect:/{id}";
 		}
-		
+
 		String logo = "";
 		if(multipartFile.isEmpty()) {
 			logo = blogService.findLogo(id);
@@ -113,12 +110,12 @@ public class BlogController {
 		}
 		logo = blogService.restore(multipartFile);
 		blogVo.setLogo(logo);
-		
+
 		blogService.update(blogVo);
-		
+
 		return "redirect:/{id}";
 	}
-	
+
 	// 카테고리 설정 페이지
 	@Auth
 	@RequestMapping(value="/admin/category", method=RequestMethod.GET)
@@ -127,19 +124,23 @@ public class BlogController {
 			@AuthUser UserVo authUser) {
 		List<CategoryVo> categoryList = categoryService.list(id);
 		model.addAttribute("categoryList", categoryList);
-		
+
 		List<Integer> postCountList = new ArrayList<>();
 		for(CategoryVo vo : categoryList) {
 			postCountList.add(postService.postCount(vo.getNo()));
 		}
 		model.addAttribute("postCountList", postCountList);
-		
+
 		BlogVo blogVo = blogService.find(id);
 		model.addAttribute("blogVo", blogVo);
 		
+		// 카테고리 개수
+		int categoryCount = categoryService.findCategoryCount(id);
+		model.addAttribute("categoryCount", categoryCount);
+
 		return "blog/blog-admin-category";
 	}
-	
+
 	// 카테고리 추가
 	@Auth
 	@RequestMapping(value="/admin/category/insert", method=RequestMethod.POST)
@@ -150,7 +151,7 @@ public class BlogController {
 		categoryService.insert(categoryVo);
 		return "redirect:/{id}/admin/category";
 	}
-	
+
 	// 카테고리 삭제
 	@Auth
 	@RequestMapping(value="/admin/category/delete/{name}")
@@ -158,10 +159,21 @@ public class BlogController {
 			@PathVariable("id") String id,
 			@PathVariable("name") String name,
 			@AuthUser UserVo authUser) {
-		categoryService.delete(id, name);
+		// 카테고리 개수가 1개일 때는 지우지 못하도록.
+		int categoryCount = categoryService.findCategoryCount(id);
+		if(categoryCount <= 1) {
+			return "redirect:/{id}/admin/category";
+		}
+		
+		// 포스트 개수가 0일 때만 지울 수 있도록.
+		int postCount = postService.postCount(categoryVo.getNo());
+		if(postCount == 0) {
+			categoryService.delete(id, name);
+		}
+		
 		return "redirect:/{id}/admin/category";
 	}
-	
+
 	// 글 작성 페이지
 	@Auth
 	@RequestMapping(value="/admin/write", method=RequestMethod.GET)
@@ -170,13 +182,13 @@ public class BlogController {
 			@AuthUser UserVo authUser) {
 		BlogVo blogVo = blogService.find(id);
 		model.addAttribute("blogVo", blogVo);
-		
+
 		List<CategoryVo> categoryList = categoryService.list(id);
 		model.addAttribute("categoryList", categoryList);
-		
+
 		return "blog/blog-admin-write";
 	}
-	
+
 	// 글 작성
 	@Auth
 	@RequestMapping(value="/admin/write", method=RequestMethod.POST)
@@ -187,8 +199,8 @@ public class BlogController {
 		Long categoryNo = categoryService.findCategoryNo(id);
 		postVo.setCategoryNo(categoryNo);
 		postService.insert(postVo);
-		
+
 		return "redirect:/{id}";
 	}
-	
+
 }

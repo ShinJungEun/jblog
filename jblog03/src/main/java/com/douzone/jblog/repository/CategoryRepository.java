@@ -38,5 +38,9 @@ public class CategoryRepository {
 		map.put("name", name);
 		return sqlSession.delete("category.delete", map);
 	}
+	
+	public int findCategoryCount(String id) {
+		return sqlSession.selectOne("category.findCategoryCount", id);
+	}
 
 }

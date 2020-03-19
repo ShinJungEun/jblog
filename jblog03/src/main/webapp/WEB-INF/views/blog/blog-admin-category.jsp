@@ -34,9 +34,17 @@
 							<!-- 포스트수 쿼리로 구해서 모델로 지정해주기 -->
 							<td>${ postCountList.get(status.index) }</td>
 							<td>${ vo.description }</td>
-							<td><a href="${ pageContext.request.contextPath }/${authUser.id}/admin/category/delete/${ vo.name }"><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></a></td>
+							<c:choose>
+								<c:when test="${categoryCount > 1 && postCountList.get(status.index) == 0 }">
+									<td><a href="${ pageContext.request.contextPath }/${authUser.id}/admin/category/delete/${ vo.name }"><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></a></td>
+								</c:when>
+								<c:otherwise>
+									<td></td>
+								</c:otherwise>
+							</c:choose>
+							
 						</tr>
-					</c:forEach>		  
+					</c:forEach>	
 				</table>
       	
       			<h4 class="n-c">새로운 카테고리 추가</h4>
