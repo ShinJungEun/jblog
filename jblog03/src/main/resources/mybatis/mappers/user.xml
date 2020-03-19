@@ -20,4 +20,12 @@
 		]]>	
 	</select>
 	
+	<select id="getUserById" parameterType="String" resultType="uservo">
+		<![CDATA[
+			select * 
+			  from user 
+			 where id = #{id}
+		]]>	
+	</select>
+	
 </mapper>

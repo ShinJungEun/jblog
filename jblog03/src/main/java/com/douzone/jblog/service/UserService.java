@@ -21,5 +21,9 @@ public class UserService {
 	public UserVo getUser(UserVo userVo) {
 		return userRepository.findUser(userVo);
 	}
+
+	public UserVo getUserById(String id) {
+		return userRepository.getUserById(id);
+	}
  
 }

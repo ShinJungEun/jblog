@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.service.CategoryService;
 import com.douzone.jblog.service.PostService;
+import com.douzone.jblog.service.UserService;
 import com.douzone.jblog.vo.BlogVo;
 import com.douzone.jblog.vo.CategoryVo;
 import com.douzone.jblog.vo.PostVo;
@@ -35,6 +36,8 @@ public class BlogController {
 	private CategoryService categoryService;
 	@Autowired
 	private PostService postService;
+	@Autowired
+	private UserService userService;
 
 	// 블로그 메인화면
 	@RequestMapping( {"", "/{pathNo1}", "/{pathNo1}/{pathNo2}" } )
@@ -42,6 +45,12 @@ public class BlogController {
 			@PathVariable Optional<Long> pathNo1,
 			@PathVariable Optional<Long> pathNo2,
 			Model model) {
+		
+		// 없는 user일 때 처리
+		UserVo userVo = userService.getUserById(id);
+		if(userVo == null) {
+			return "error/404";			
+		}
 
 		Long categoryNo = 0L;
 		Long postNo = 0L;

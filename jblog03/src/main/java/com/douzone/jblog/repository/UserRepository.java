@@ -20,4 +20,8 @@ public class UserRepository {
 		return sqlSession.selectOne("user.find", userVo);
 	}
 
+	public UserVo getUserById(String id) {
+		return sqlSession.selectOne("user.getUserById", id);
+	}
+
 }
