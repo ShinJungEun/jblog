@@ -26,8 +26,10 @@
 			</c:choose>
 			</ul>
 		<form class="login-form" name="loginform" method="post" action="${ pageContext.request.contextPath }/user/auth">
-      		<label>아이디</label> <input type="text" name="id">
-      		<label class="block-label" >패스워드</label> <input type="password" name="password">
+      		<label>아이디</label> 
+      		<input type="text" name="id">
+      		<label class="block-label" >패스워드</label> 
+      		<input type="password" name="password">
       		<input type="submit" value="로그인">
 		</form>
 	</div>
