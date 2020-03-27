@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="category">
+	
+	<select id="findAll" parameterType="String" resultType="categoryvo">
+		<![CDATA[
+		    select no,
+		           name, 
+		           description,
+		           reg_date,
+		           id
+		     from category
+		    where id = #{id}
+		]]>
+	</select>
+	
+	<select id="findCategoryNo" parameterType="map" resultType="Long">
+		<![CDATA[
+		    select no 
+		      from category 
+		     where id = #{id}
+		     limit 1
+		]]>
+	</select>	
+	
+	<select id="findCategoryCount" parameterType="String" resultType="int">
+		<![CDATA[
+		    select count(*) 
+		      from category
+		     where id=#{id}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="categoryvo">
+		<![CDATA[
+		insert 
+		  into category 
+		values (null, #{name}, #{description}, now(), #{id})
+		]]>
+	</insert>
+	
+	<insert id="defaultInsert" parameterType="String">
+		<![CDATA[
+		insert 
+		  into category
+		values (null, '기타', null, now(), #{id})
+		]]>
+	</insert>
+	
+	<delete id="delete" parameterType="map">
+		<![CDATA[
+			delete from category
+			 where id = #{id} and name = #{name}
+		]]>
+	</delete>
+	
+	
+</mapper>
