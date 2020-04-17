@@ -25,8 +25,8 @@ public class CategoryService {
 		return count == 1;		
 	}
 	
-	public boolean delete(String id, String name) {
-		int count = categoryRepository.delete(id, name);
+	public boolean delete(String id, Long no) {
+		int count = categoryRepository.delete(id, no);
 		return count == 1;	
 	}
 	

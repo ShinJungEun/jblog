@@ -32,10 +32,10 @@ public class CategoryRepository {
 		return sqlSession.selectOne("category.findCategoryNo", id);
 	}
 
-	public int delete(String id, String name) {
+	public int delete(String id, Long no) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("id", id);
-		map.put("name", name);
+		map.put("no", no);
 		return sqlSession.delete("category.delete", map);
 	}
 	

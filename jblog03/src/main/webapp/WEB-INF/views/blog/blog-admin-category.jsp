@@ -17,6 +17,7 @@
 				<ul class="admin-menu">
 					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/basic">기본설정</a></li>
 					<li class="selected">카테고리</li>
+					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/api/category">api 카테고리</a></li>
 					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/write">글작성</a></li>
 				</ul>
 		      	<table class="admin-cat">
@@ -32,11 +33,11 @@
 							<td>${ fn:length(categoryList) - status.index }</td>
 							<td>${ vo.name }</td>
 							<!-- 포스트수 쿼리로 구해서 모델로 지정해주기 -->
-							<td>${ postCountList.get(status.index) }</td>
+							<td>${ vo.postCount }</td>
 							<td>${ vo.description }</td>
 							<c:choose>
-								<c:when test="${categoryCount > 1 && postCountList.get(status.index) == 0 }">
-									<td><a href="${ pageContext.request.contextPath }/${authUser.id}/admin/category/delete/${ vo.name }"><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></a></td>
+								<c:when test="${categoryCount > 1 && vo.postCount == 0 }">
+									<td><a href="${ pageContext.request.contextPath }/${authUser.id}/admin/category/delete/${ vo.no }"><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></a></td>
 								</c:when>
 								<c:otherwise>
 									<td></td>

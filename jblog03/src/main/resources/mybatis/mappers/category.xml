@@ -8,10 +8,11 @@
 		    select no,
 		           name, 
 		           description,
-		           reg_date,
+		           reg_date as regDate,
 		           id
 		     from category
 		    where id = #{id}
+		 order by reg_date desc
 		]]>
 	</select>
 	
@@ -51,7 +52,7 @@
 	<delete id="delete" parameterType="map">
 		<![CDATA[
 			delete from category
-			 where id = #{id} and name = #{name}
+			 where id = #{id} and no = #{no}
 		]]>
 	</delete>
 	
