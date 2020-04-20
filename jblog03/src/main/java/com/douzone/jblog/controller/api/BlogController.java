@@ -44,6 +44,7 @@ public class BlogController {
 	@PostMapping("/insert")
 	public JsonResult insert(@RequestBody CategoryVo vo) {
 		categoryService.insert(vo);
+		
 		return JsonResult.success(vo);
 	}
 	

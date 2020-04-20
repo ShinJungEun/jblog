@@ -212,6 +212,7 @@ public class BlogController {
 		return "redirect:/{id}";
 	}
 	
+	@Auth
 	@RequestMapping(value={"/admin/api/category"}, method=RequestMethod.GET)
 	public String index(Model model) {
 		return "blog/blog-api-admin-category";

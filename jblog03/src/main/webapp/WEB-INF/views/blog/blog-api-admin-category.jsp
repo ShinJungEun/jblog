@@ -20,18 +20,6 @@
 		url: "${pageContext.request.contextPath }/assets/js/ejs/list-template.ejs"
 	});
 	
-// 	var render = function(vo, mode) {
-// // 		var postCountList = '${postCountList}';
-
-// 		var html = 
-// 			"<tr><td>" + (count++) + "</td>" +
-// 			"<td>" + vo.name + "</td>" +
-// 			"<td>" + vo.postCount + "</td>" +
-// 			"<td>" + vo.description + "</td></tr>";
-			
-// 			$("#menu-title").after(html);
-// 	}
-
 	var list = function() {
 		count = 1;
 		$.ajax({
@@ -47,7 +35,7 @@
 				}
 				response.contextPath = "${ pageContext.request.contextPath }";
 				var html = listTemplate.render(response);
-				$(".admin-cat").append(html);
+				$(".admin-cat ").append(html);
 			},
 			error: function(xhr, status, e) {
 				console.error(status + ":" + e);
@@ -65,7 +53,7 @@
 			vo.id = "${authUser.id}";
 			
 			$.ajax({
-				url: '${ pageContext.request.contextPath }/${authUser.id}/admin/api/category/insert',
+				url: '${ pageContext.request.contextPath }/${authUser.id}/admin/api/category/insert/',
 				async: true,
 				type: 'post',
 				dataType: 'json',
@@ -77,9 +65,14 @@
 						return;
 					}
 					response.data.listCount = $('.admin-cat ').find('tr').length;
+					response.data.lastNum = Number($('.admin-cat tr:nth-child(2) td')[0].innerText) + 1;
+					
+					console.log("lastNum:"+response.data.lastNum);
+					
 					response.data.contextPath = "${ pageContext.request.contextPath }";
+					
 					var html = listItemTemplate.render(response.data);
-					$(".admin-cat").append(html);
+					$(".admin-cat tr").first().after(html);
 					
 					// form reset
 					$("#add-form")[0].reset();
@@ -94,7 +87,8 @@
 		$(document).on('click','.admin-cat tr td a',function(event){
 			event.preventDefault();
 			var no = $(this).data('no');
-
+			$(this).parents('tr').remove();
+			console.log("dataNo: " + no);
 			$.ajax({
 				url: '${pageContext.request.contextPath }/${authUser.id}/admin/api/category/delete/' + no,
 				async: true,
@@ -102,12 +96,27 @@
 				dataType: 'json',
 				data: '',
 				success: function(response) {
-					 if(response.data != -1){
-				            console.log(response.data);
-				             $(".admin-cat tr[data-no=" + response.data + "]").remove(); 
+ 
+					console.log(tdCount+":"+trCount);
+	
+					if(response.data != -1){
+				          console.log(response.data);
 				            
-				            return;
-				         }
+							var tdCount = $('.admin-cat').find('tr td').length;
+							var trCount = $('.admin-cat').find('tr').length;
+							
+							for(var i = tdCount - 5, j = 1; i >= 0; i -= 5, j++) {
+								console.log(i, $('.admin-cat tr td')[i]);
+								if($('.admin-cat tr td')[i].innerText == j) {
+									continue;
+								} else {
+									console.log("find: " + $('.admin-cat tr td')[i].innerText);
+									$('.admin-cat tr td')[i].innerText = j;
+								}
+							}
+				          
+				          return;
+				    }
 
 					
 				},
@@ -117,24 +126,6 @@
 			});
 		});
 		
-		$("#delete-button").click(function() {
-			var no = $(this).no;
-			$.ajax({
-				url: '${pageContext.request.contextPath }/${authUser.id}/admin/api/category/delete' + no,
-				async: true,
-				type: 'delete',
-				dataType: 'json',
-				success: function(response) {
-					if(response.result != "success") {
-						console.error(response.message);
-						return;
-					}
-				},
-				error: function(xhr, status, e) {
-					console.error(status + ":" + e);
-				}
-			});
-		});
 		
 		list();
 		
@@ -153,13 +144,13 @@
 					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/write">글작성</a></li>
 				</ul>
 		      	<table class="admin-cat">
-		      		<tr id = 'menu-title'>
-		      			<td>번호</td>
-		      			<td>카테고리명</td>
-		      			<td>포스트 수</td>
-		      			<td>설명</td>
-		      			<td>삭제</td>      			
-		      		</tr>
+		      		<tr>
+						<th>번호</th>
+						<th>카테고리명</th>
+						<th>포스트 수</th>
+						<th>설명</th>
+						<th>삭제</th>      			
+					</tr>
 				</table>
       	
                <h4 class="n-c">새로운 카테고리 추가</h4>

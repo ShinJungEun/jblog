@@ -1,9 +1,10 @@
 <%
 	for(var i = 0; i < data.length; i++) {
 		var vo = data[i]; 
+		var len = data.length-i;
 %>
 		<tr data-no='<%=vo.no%>'>
-			<td><%=data.length-i%></td>
+			<td><%=len%></td>
 			<td><%=vo.name%></td>
 			<td><%=vo.postCount%></td>
 			<td><%=vo.description%></td>
@@ -17,6 +18,7 @@
 			<%
 				}
 			%></td>
+			
 		</tr>
 <%
 	}
