@@ -88,7 +88,7 @@
 			event.preventDefault();
 			var no = $(this).data('no');
 			$(this).parents('tr').remove();
-			console.log("dataNo: " + no);
+
 			$.ajax({
 				url: '${pageContext.request.contextPath }/${authUser.id}/admin/api/category/delete/' + no,
 				async: true,

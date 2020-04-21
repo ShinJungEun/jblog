@@ -214,7 +214,9 @@ public class BlogController {
 	
 	@Auth
 	@RequestMapping(value={"/admin/api/category"}, method=RequestMethod.GET)
-	public String index(Model model) {
+	public String index(@PathVariable("id") String id, Model model) {
+		BlogVo blogVo = blogService.find(id);
+		model.addAttribute("blogVo", blogVo);
 		return "blog/blog-api-admin-category";
 	}
 }
