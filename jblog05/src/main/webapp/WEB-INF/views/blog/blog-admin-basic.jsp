@@ -17,6 +17,7 @@
 				<ul class="admin-menu">
 					<li class="selected">기본설정</li>
 					<li><a href="${pageContext.request.contextPath }/${ blogVo.id }/admin/category">카테고리</a></li>
+					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/api/category">api 카테고리</a></li>
 					<li><a href="${pageContext.request.contextPath }/${ blogVo.id }/admin/write">글작성</a></li>
 				</ul>
 				<form method="post" action="${pageContext.request.contextPath }/${ blogVo.id }/admin/basic" enctype="multipart/form-data">

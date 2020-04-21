@@ -8,7 +8,7 @@ public class CategoryVo {
 	private String description;
 	private Timestamp regDate;
 	private String id;
-	
+	private int postCount;
 	public Long getNo() {
 		return no;
 	}
@@ -39,10 +39,16 @@ public class CategoryVo {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+	public int getPostCount() {
+		return postCount;
+	}
+	public void setPostCount(int postCount) {
+		this.postCount = postCount;
+	}
 	@Override
 	public String toString() {
 		return "CategoryVo [no=" + no + ", name=" + name + ", description=" + description + ", regDate=" + regDate
-				+ ", id=" + id + "]";
+				+ ", id=" + id + ", postCount=" + postCount + "]";
 	}
+	
 }

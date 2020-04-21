@@ -1,0 +1,25 @@
+<%
+	for(var i = 0; i < data.length; i++) {
+		var vo = data[i]; 
+		var len = data.length-i;
+%>
+		<tr data-no='<%=vo.no%>'>
+			<td><%=len%></td>
+			<td><%=vo.name%></td>
+			<td><%=vo.postCount%></td>
+			<td><%=vo.description%></td>
+			<td>
+			<%
+				if(data.length > 1 && vo.postCount == 0) {
+			%>
+
+				<a href="" data-no=<%=vo.no%>>
+				<img id="delete-button" src="<%=contextPath%>/assets/images/delete.jpg"></a>
+			<%
+				}
+			%></td>
+			
+		</tr>
+<%
+	}
+%>

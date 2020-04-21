@@ -1,0 +1,16 @@
+<tr>
+			<td><%=lastNum%></td>
+			<td><%=name%></td>
+			<td><%=postCount%></td>
+			<td><%=description%></td>
+			<td>
+			<%
+				if(listCount > 1 && postCount == 0) {
+			%>
+
+				<a href="" data-no=<%=no%>>
+				<img id="delete-button" src="<%=contextPath%>/assets/images/delete.jpg"></a>
+			<%
+				}
+			%></td>
+</tr>

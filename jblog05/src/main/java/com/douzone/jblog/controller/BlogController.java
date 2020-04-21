@@ -132,14 +132,13 @@ public class BlogController {
 			@PathVariable("id") String id,
 			@AuthUser UserVo authUser) {
 		List<CategoryVo> categoryList = categoryService.list(id);
-		model.addAttribute("categoryList", categoryList);
 
-		List<Integer> postCountList = new ArrayList<>();
 		for(CategoryVo vo : categoryList) {
-			postCountList.add(postService.postCount(vo.getNo()));
+			vo.setPostCount(postService.postCount(vo.getNo()));
 		}
-		model.addAttribute("postCountList", postCountList);
-
+		
+		model.addAttribute("categoryList", categoryList);
+		
 		BlogVo blogVo = blogService.find(id);
 		model.addAttribute("blogVo", blogVo);
 		
@@ -158,15 +157,16 @@ public class BlogController {
 			@AuthUser UserVo authUser) {
 		categoryVo.setId(id);
 		categoryService.insert(categoryVo);
+
 		return "redirect:/{id}/admin/category";
 	}
 
 	// 카테고리 삭제
 	@Auth
-	@RequestMapping(value="/admin/category/delete/{name}")
+	@RequestMapping(value="/admin/category/delete/{no}")
 	public String categoryDelete(@ModelAttribute CategoryVo categoryVo,
 			@PathVariable("id") String id,
-			@PathVariable("name") String name,
+			@PathVariable("no") Long no,
 			@AuthUser UserVo authUser) {
 		// 카테고리 개수가 1개일 때는 지우지 못하도록.
 		int categoryCount = categoryService.findCategoryCount(id);
@@ -177,7 +177,7 @@ public class BlogController {
 		// 포스트 개수가 0일 때만 지울 수 있도록.
 		int postCount = postService.postCount(categoryVo.getNo());
 		if(postCount == 0) {
-			categoryService.delete(id, name);
+			categoryService.delete(id, no);
 		}
 		
 		return "redirect:/{id}/admin/category";
@@ -211,5 +211,12 @@ public class BlogController {
 
 		return "redirect:/{id}";
 	}
-
+	
+	@Auth
+	@RequestMapping(value={"/admin/api/category"}, method=RequestMethod.GET)
+	public String index(@PathVariable("id") String id, Model model) {
+		BlogVo blogVo = blogService.find(id);
+		model.addAttribute("blogVo", blogVo);
+		return "blog/blog-api-admin-category";
+	}
 }

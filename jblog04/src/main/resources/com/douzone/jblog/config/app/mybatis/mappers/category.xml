@@ -8,10 +8,11 @@
 		    select no,
 		           name, 
 		           description,
-		           reg_date,
+		           reg_date as regDate,
 		           id
 		     from category
 		    where id = #{id}
+		 order by reg_date desc
 		]]>
 	</select>
 	
@@ -38,6 +39,9 @@
 		  into category 
 		values (null, #{name}, #{description}, now(), #{id})
 		]]>
+		<selectKey keyProperty = "no" resultType="long" order="AFTER">
+         	select last_insert_id()
+      	</selectKey>
 	</insert>
 	
 	<insert id="defaultInsert" parameterType="String">
@@ -51,7 +55,7 @@
 	<delete id="delete" parameterType="map">
 		<![CDATA[
 			delete from category
-			 where id = #{id} and name = #{name}
+			 where id = #{id} and no = #{no}
 		]]>
 	</delete>
 	
